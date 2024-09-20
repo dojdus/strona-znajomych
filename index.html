@@ -10,9 +10,7 @@
             background-color: #f4f4f4;
             color: #333;
             margin: 0;
-            padding: 0;
-            position: relative;
-            overflow: hidden; /* Ukrycie przewijania */
+            padding-bottom: 60px; /* Miejsce na stopkę */
         }
         header {
             background-color: #4CAF50;
@@ -43,25 +41,25 @@
             margin: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transform: scale(1.1); /* Powiększenie sekcji */
-            opacity: 0; /* Sekcja jest niewidoczna na początku */
-            transition: transform 0.5s ease, opacity 0.5s ease; /* Płynne przejście */
+            transform: scale(1.1);
+            opacity: 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
         .active {
             display: block;
-            transform: scale(1); /* Normalny rozmiar */
-            opacity: 1; /* Sekcja staje się widoczna */
+            transform: scale(1);
+            opacity: 1;
         }
         footer {
-            background-color: #3c8d40; /* Ciemnozielone tło */
-            color: #f0f0f0; /* Jasny, stonowany kolor tekstu */
+            background-color: #3c8d40;
+            color: #f0f0f0;
             text-align: center;
             padding: 15px 0;
             font-size: 14px;
             position: fixed;
             bottom: 0;
             width: 100%;
-            opacity: 0.9; /* Zmniejszenie intensywności */
+            opacity: 0.9;
         }
         .overlay {
             position: fixed;
@@ -71,13 +69,13 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
             opacity: 0;
-            pointer-events: none; /* Blokowanie interakcji */
-            transition: opacity 0.5s ease; /* Płynne przejście */
-            z-index: 10; /* Nad innymi elementami */
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 10;
         }
         .overlay.active {
             opacity: 1;
-            pointer-events: auto; /* Włączanie interakcji */
+            pointer-events: auto;
         }
         .music-container {
             text-align: center;
@@ -91,7 +89,7 @@
             cursor: pointer;
             font-size: 16px;
             border-radius: 5px;
-            margin: 0 5px; /* Margines między przyciskami */
+            margin: 0 5px;
         }
         .music-container button:hover {
             background-color: #45a049;
@@ -100,33 +98,33 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px; /* Odstęp między zdjęciami */
+            gap: 10px;
         }
         .thumbnail {
-            width: 150px; /* Szerokość miniaturki */
-            height: auto; /* Utrzymanie proporcji */
-            transition: transform 0.2s; /* Płynne przejście */
-            cursor: pointer; /* Kursor wskazujący */
+            width: 150px;
+            height: auto;
+            transition: transform 0.2s;
+            cursor: pointer;
         }
         .thumbnail:hover {
-            transform: scale(1.1); /* Powiększenie miniaturki po najechaniu */
+            transform: scale(1.1);
         }
         .modal {
-            display: none; /* Ukrycie modalnego okna */
+            display: none;
             position: fixed;
-            z-index: 1000; /* Wyższy poziom z-index */
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto; /* Dodanie przewijania */
-            background-color: rgba(0, 0, 0, 0.8); /* Ciemne tło */
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
         }
         .modal-content {
             margin: auto;
             display: block;
             width: 80%;
-            max-width: 700px; /* Maksymalna szerokość powiększonego zdjęcia */
+            max-width: 700px;
         }
         .close {
             position: absolute;
@@ -146,7 +144,6 @@
 </header>
 
 <nav>
-    <!-- Przyciski nawigacyjne do sekcji -->
     <button onclick="showSection('glowna')">Strona główna</button>
     <button onclick="showSection('wspomnienia')">Wspomnienia</button>
     <button onclick="showSection('wyzwania')">Wyzwania</button>
@@ -155,19 +152,17 @@
     <button onclick="showSection('quizy')">Quizy</button>
 </nav>
 
-<!-- Zasłona dymna -->
 <div class="overlay" id="overlay"></div>
 
-<!-- Sekcje -->
 <section id="glowna" class="active">
     <h2>Strona główna</h2>
     <p>Witamy na naszej wspólnej stronie, gdzie dzielimy się wspomnieniami, wyzwaniami, przepisami i więcej!</p>
     
     <div class="music-container">
-        <span>&#127926;</span> <!-- Ikona nuty -->
+        <span>&#127926;</span>
         <button onclick="playMusic()">Play</button>
         <button onclick="stopMusic()">Stop</button>
-        <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio> <!-- Zmień na ścieżkę do swojej piosenki -->
+        <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio>
     </div>
 </section>
 
@@ -232,7 +227,6 @@
     </ul>
 </section>
 
-<!-- Stopka -->
 <footer>
     <p>Strona stworzona dla znajomych - Wszelkie prawa zastrzeżone &copy; 2024</p>
     <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
@@ -241,11 +235,8 @@
 <script>
     function showSection(sectionId) {
         const overlay = document.getElementById('overlay');
-
-        // Pokazanie zasłony dymnej
         overlay.classList.add('active');
 
-        // Po krótkim czasie ukryj wszystkie sekcje i pokaż wybraną
         setTimeout(() => {
             var sections = document.querySelectorAll('section');
             sections.forEach(function(section) {
@@ -255,9 +246,8 @@
             var activeSection = document.getElementById(sectionId);
             activeSection.classList.add('active');
 
-            // Ukrycie zasłony dymnej po pokazaniu sekcji
             overlay.classList.remove('active');
-        }, 500); // Czas trwania zasłony dymnej
+        }, 500);
     }
 
     function playMusic() {
@@ -267,15 +257,18 @@
 
     function stopMusic() {
         const audio = document.getElementById('backgroundMusic');
-        audio.pause(); // Zatrzymanie odtwarzania
+        audio.pause();
         audio.currentTime = 0; // Resetowanie do początku
     }
 
     function openImage(src) {
         const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("img01");
+        const img = document.getElementById("img01");
+        const caption = document.getElementById("caption");
+
+        img.src = src;
+        caption.innerHTML = src; // Opcjonalnie zmień, aby dodać podpis
         modal.style.display = "block";
-        modalImg.src = src;
     }
 
     function closeImage() {
