@@ -96,6 +96,47 @@
         .music-container button:hover {
             background-color: #45a049;
         }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px; /* Odstęp między zdjęciami */
+        }
+        .thumbnail {
+            width: 150px; /* Szerokość miniaturki */
+            height: auto; /* Utrzymanie proporcji */
+            transition: transform 0.2s; /* Płynne przejście */
+            cursor: pointer; /* Kursor wskazujący */
+        }
+        .thumbnail:hover {
+            transform: scale(1.1); /* Powiększenie miniaturki po najechaniu */
+        }
+        .modal {
+            display: none; /* Ukrycie modalnego okna */
+            position: fixed;
+            z-index: 1000; /* Wyższy poziom z-index */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Dodanie przewijania */
+            background-color: rgba(0, 0, 0, 0.8); /* Ciemne tło */
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px; /* Maksymalna szerokość powiększonego zdjęcia */
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -126,7 +167,7 @@
         <span>&#127926;</span> <!-- Ikona nuty -->
         <button onclick="playMusic()">Play</button>
         <button onclick="stopMusic()">Stop</button>
-        <audio id="backgroundMusic" src="https://github.com/dojdus/strona-znajomych/blob/main/music/parapetówka.mp3"></audio> <!-- Zmień na ścieżkę do swojej piosenki -->
+        <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio> <!-- Zmień na ścieżkę do swojej piosenki -->
     </div>
 </section>
 
@@ -134,11 +175,15 @@
     <h2>Nasze wspomnienia</h2>
     <p>Dodaj swoje wspomnienia poniżej:</p>
     <div class="gallery">
-        <!-- Dodaj zdjęcia -->
-        <img src="images/zdjecie1.png" alt="Zdjęcie 1" width="200" height="200">
-        <img src="images/zdjecie2.png" alt="Zdjęcie 2" width="100" height="100">
-        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" width="100" height="100">
-        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" width="100" height="100">
+        <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
+    </div>
+    <div id="imageModal" class="modal" onclick="closeImage()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
     </div>
 </section>
 
@@ -193,7 +238,6 @@
     <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
 </footer>
 
-
 <script>
     function showSection(sectionId) {
         const overlay = document.getElementById('overlay');
@@ -225,6 +269,18 @@
         const audio = document.getElementById('backgroundMusic');
         audio.pause(); // Zatrzymanie odtwarzania
         audio.currentTime = 0; // Resetowanie do początku
+    }
+
+    function openImage(src) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("img01");
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    function closeImage() {
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none";
     }
 </script>
 
