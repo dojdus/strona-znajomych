@@ -10,7 +10,7 @@
             background-color: #f4f4f4;
             color: #333;
             margin: 0;
-            padding-bottom: 60px; /* Miejsce na stopkę */
+            padding-bottom: 60px; /* Zapewnienie miejsca na stopkę */
         }
         header {
             background-color: #4CAF50;
@@ -119,6 +119,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
+            text-align: center;
         }
         .modal-content {
             margin: auto;
@@ -134,6 +135,28 @@
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            transition: 0.6s ease;
+            cursor: pointer;
+        }
+        .arrow:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .left {
+            left: 0;
+            transform: translateY(-50%);
+        }
+        .right {
+            right: 0;
+            transform: translateY(-50%);
         }
     </style>
 </head>
@@ -170,15 +193,17 @@
     <h2>Nasze wspomnienia</h2>
     <p>Dodaj swoje wspomnienia poniżej:</p>
     <div class="gallery">
-        <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src, 0)">
+        <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src, 1)">
+        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src, 2)">
+        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src, 3)">
     </div>
-    <div id="imageModal" class="modal" onclick="closeImage()">
-        <span class="close">&times;</span>
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeImage()">&times;</span>
         <img class="modal-content" id="img01">
         <div id="caption"></div>
+        <div class="arrow left" onclick="changeImage(-1)">&#10094;</div>
+        <div class="arrow right" onclick="changeImage(1)">&#10095;</div>
     </div>
 </section>
 
@@ -223,57 +248,60 @@
     <p>Sprawdź swoją wiedzę w quizach!</p>
     <ul>
         <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
-        <li>Quiz 2: Sprawdź swoją wiedzę o filmach.</li>
+        <li>Quiz 2: Sprawdź swoją wiedzę o wspólnych wspomnieniach!</li>
     </ul>
 </section>
 
 <footer>
-    <p>Strona stworzona dla znajomych - Wszelkie prawa zastrzeżone &copy; 2024</p>
-    <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
+    <p>Autor strony: @dojduss</p>
 </footer>
 
 <script>
+    let currentImageIndex = 0;
+    const images = [
+        'images/zdjecie1.png',
+        'images/zdjecie2.png',
+        'images/zdjecie6.webp',
+        'images/zdjecie7.webp'
+    ];
+
     function showSection(sectionId) {
-        const overlay = document.getElementById('overlay');
-        overlay.classList.add('active');
-
-        setTimeout(() => {
-            var sections = document.querySelectorAll('section');
-            sections.forEach(function(section) {
-                section.classList.remove('active');
-            });
-
-            var activeSection = document.getElementById(sectionId);
-            activeSection.classList.add('active');
-
-            overlay.classList.remove('active');
-        }, 500);
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
     }
 
-    function playMusic() {
-        const audio = document.getElementById('backgroundMusic');
-        audio.play();
-    }
-
-    function stopMusic() {
-        const audio = document.getElementById('backgroundMusic');
-        audio.pause();
-        audio.currentTime = 0; // Resetowanie do początku
-    }
-
-    function openImage(src) {
-        const modal = document.getElementById("imageModal");
-        const img = document.getElementById("img01");
-        const caption = document.getElementById("caption");
-
-        img.src = src;
-        caption.innerHTML = src; // Opcjonalnie zmień, aby dodać podpis
-        modal.style.display = "block";
+    function openImage(src, index) {
+        currentImageIndex = index;
+        document.getElementById('img01').src = src;
+        document.getElementById('caption').innerText = "Zdjęcie " + (index + 1);
+        document.getElementById('imageModal').style.display = 'block';
+        document.getElementById('overlay').classList.add('active');
     }
 
     function closeImage() {
-        const modal = document.getElementById("imageModal");
-        modal.style.display = "none";
+        document.getElementById('imageModal').style.display = 'none';
+        document.getElementById('overlay').classList.remove('active');
+    }
+
+    function changeImage(direction) {
+        currentImageIndex += direction;
+        if (currentImageIndex < 0) {
+            currentImageIndex = images.length - 1;
+        } else if (currentImageIndex >= images.length) {
+            currentImageIndex = 0;
+        }
+        openImage(images[currentImageIndex], currentImageIndex);
+    }
+
+    function playMusic() {
+        document.getElementById('backgroundMusic').play();
+    }
+
+    function stopMusic() {
+        document.getElementById('backgroundMusic').pause();
     }
 </script>
 
