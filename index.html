@@ -135,6 +135,41 @@
             font-weight: bold;
             cursor: pointer;
         }
+        .form-container {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container.active {
+            display: block;
+        }
+        .form-container input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .admin-section {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -150,6 +185,9 @@
     <button onclick="showSection('kalendarz')">Kalendarz</button>
     <button onclick="showSection('przepisy')">Przepisy</button>
     <button onclick="showSection('quizy')">Quizy</button>
+    <button onclick="showSection('rejestracja')">Rejestracja</button>
+    <button onclick="showSection('logowanie')">Logowanie</button>
+    <button onclick="showAdminSection()">Admin</button>
 </nav>
 
 <div class="overlay" id="overlay"></div>
@@ -227,27 +265,91 @@
     </ul>
 </section>
 
+<div class="form-container" id="rejestracja">
+    <h2>Rejestracja</h2>
+    <input type="text" id="registerName" placeholder="Imię" required>
+    <input type="password" id="registerPassword" placeholder="Hasło" required>
+    <button onclick="registerUser()">Zarejestruj się</button>
+</div>
+
+<div class="form-container" id="logowanie">
+    <h2>Logowanie</h2>
+    <input type="text" id="loginName" placeholder="Imię" required>
+    <input type="password" id="loginPassword" placeholder="Hasło" required>
+    <button onclick="loginUser()">Zaloguj się</button>
+</div>
+
+<div class="admin-section" id="adminSection">
+    <h2>Panel Administratora</h2>
+    <p>Witaj, adminie! Liczba zarejestrowanych użytkowników: <span id="userCount">0</span></p>
+</div>
+
 <footer>
     <p style="margin: 0; padding: 10px 0;">Strona stworzona dla znajomych - Wszelkie prawa zastrzeżone &copy; 2024</p>
     <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
 </footer>
 
 <script>
+    let users = [];
+    let isAdmin = false;
+
     function showSection(sectionId) {
         const overlay = document.getElementById('overlay');
         overlay.classList.add('active');
 
         setTimeout(() => {
-            var sections = document.querySelectorAll('section');
+            var sections = document.querySelectorAll('section, .form-container');
             sections.forEach(function(section) {
                 section.classList.remove('active');
             });
 
             var activeSection = document.getElementById(sectionId);
-            activeSection.classList.add('active');
+            if (activeSection) {
+                activeSection.classList.add('active');
+            }
 
             overlay.classList.remove('active');
         }, 500);
+    }
+
+    function showAdminSection() {
+        if (isAdmin) {
+            document.getElementById('adminSection').style.display = 'block';
+            showSection('adminSection');
+        } else {
+            alert('Musisz być zalogowany jako administrator!');
+        }
+    }
+
+    function registerUser() {
+        const name = document.getElementById('registerName').value;
+        const password = document.getElementById('registerPassword').value;
+
+        if (name && password) {
+            users.push({ name, password });
+            alert('Rejestracja zakończona sukcesem!');
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerPassword').value = '';
+            updateUserCount();
+        } else {
+            alert('Proszę wypełnić wszystkie pola!');
+        }
+    }
+
+    function loginUser() {
+        const name = document.getElementById('loginName').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const user = users.find(u => u.name === name && u.password === password);
+        if (user) {
+            alert('Zalogowano pomyślnie!');
+            isAdmin = (name === 'admin' && password === 'adminpass'); // Prosta logika admina
+            showAdminSection();
+            document.getElementById('loginName').value = '';
+            document.getElementById('loginPassword').value = '';
+        } else {
+            alert('Błędne dane logowania!');
+        }
     }
 
     function playMusic() {
@@ -274,6 +376,10 @@
     function closeImage() {
         const modal = document.getElementById("imageModal");
         modal.style.display = "none";
+    }
+
+    function updateUserCount() {
+        document.getElementById('userCount').innerText = users.length;
     }
 </script>
 
