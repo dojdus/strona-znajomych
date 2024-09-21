@@ -61,22 +61,6 @@
             width: 100%;
             opacity: 0.9;
         }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            z-index: 10;
-        }
-        .overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
         .music-container {
             text-align: center;
             margin: 20px 0;
@@ -135,27 +119,29 @@
             font-weight: bold;
             cursor: pointer;
         }
-        .form-container {
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .form-container input {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-        }
-        .admin-section {
-            display: none;
-            margin: 20px;
+        #login-section, #register-section {
             padding: 20px;
             background-color: #fff;
+            margin: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #admin-panel {
+            display: none;
+            padding: 20px;
+            background-color: #eee;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #logout-btn {
+            display: none;
+            padding: 10px 20px;
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -165,6 +151,7 @@
     <h1>Witamy na stronie znajomych!</h1>
 </header>
 
+<!-- Sekcja nawigacji -->
 <nav>
     <button onclick="showSection('glowna')">Strona główna</button>
     <button onclick="showSection('wspomnienia')">Wspomnienia</button>
@@ -172,215 +159,159 @@
     <button onclick="showSection('kalendarz')">Kalendarz</button>
     <button onclick="showSection('przepisy')">Przepisy</button>
     <button onclick="showSection('quizy')">Quizy</button>
-    <button onclick="logout()" style="display: none;" id="logoutButton">Wyloguj się</button>
+    <button id="logout-btn" onclick="logout()">Wyloguj</button>
 </nav>
 
-<div class="overlay" id="overlay"></div>
-
-<div id="mainContent" style="display: none;">
-    <section id="glowna" class="active">
-        <h2>Strona główna</h2>
-        <p>Witamy na naszej wspólnej stronie, gdzie dzielimy się wspomnieniami, wyzwaniami, przepisami i więcej!</p>
-        
-        <div class="music-container">
-            <span>&#127926;</span>
-            <button onclick="playMusic()">Play</button>
-            <button onclick="stopMusic()">Stop</button>
-            <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio>
-        </div>
-    </section>
-
-    <section id="wspomnienia">
-        <h2>Nasze wspomnienia</h2>
-        <p>Dodaj swoje wspomnienia poniżej:</p>
-        <div class="gallery">
-            <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
-            <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
-            <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
-            <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
-        </div>
-        <div id="imageModal" class="modal" onclick="closeImage()">
-            <span class="close">&times;</span>
-            <img class="modal-content" id="img01">
-            <div id="caption"></div>
-        </div>
-    </section>
-
-    <section id="wyzwania">
-        <h2>Wyzwania</h2>
-        <p>Tutaj znajdziesz nasze grupowe wyzwania.</p>
-        <ul>
-            <li>Wyzwanie 1: Jeszcze nie wiem co tu będzie</li>
-            <li>Wyzwanie 2: Jeszcze nie wiem co tu będzie</li>
-        </ul>
-    </section>
-
-    <section id="kalendarz">
-        <h2>Kalendarz wydarzeń</h2>
-        <table border="1" cellspacing="0" cellpadding="10">
-            <tr>
-                <th>Data</th>
-                <th>Wydarzenie</th>
-            </tr>
-            <tr>
-                <td>21.09.2024</td>
-                <td>Ryby</td>
-            </tr>
-            <tr>
-                <td>22.09.2024</td>
-                <td>Ryby</td>
-            </tr>
-        </table>
-    </section>
-
-    <section id="przepisy">
-        <h2>Nasze przepisy</h2>
-        <p>Dodaj swoje ulubione przepisy tutaj.</p>
-        <ul>
-            <li><strong>Nie wiem:</strong> Nie wiem co tu będzie.</li>
-            <li><strong>Ale przykład od Wojtusia: Pizza:</strong> Ciasto, sos pomidorowy, ser, dodatki.</li>
-        </ul>
-    </section>
-
-    <section id="quizy">
-        <h2>Quizy i gry</h2>
-        <p>Sprawdź swoją wiedzę w quizach!</p>
-        <ul>
-            <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
-            <li>Quiz 2: Jak dobrze znasz jedzenie?</li>
-        </ul>
-    </section>
-
-    <div class="admin-section" id="adminSection">
-        <h2>Panel Administratora</h2>
-        <p>Witaj, adminie! Liczba zarejestrowanych użytkowników: <span id="userCount">0</span></p>
+<section id="glowna" class="active">
+    <h2>Strona główna</h2>
+    <p>Witamy na naszej wspólnej stronie, gdzie dzielimy się wspomnieniami, wyzwaniami, przepisami i więcej!</p>
+    
+    <div class="music-container">
+        <span>&#127926;</span>
+        <button onclick="playMusic()">Play</button>
+        <button onclick="stopMusic()">Stop</button>
+        <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio>
     </div>
-</div>
+</section>
 
-<div class="form-container" id="rejestracja">
-    <h2>Rejestracja</h2>
-    <input type="text" id="registerName" placeholder="Imię" required>
-    <input type="password" id="registerPassword" placeholder="Hasło" required>
-    <button onclick="registerUser()">Zarejestruj się</button>
-</div>
+<section id="wspomnienia">
+    <h2>Nasze wspomnienia</h2>
+    <div class="gallery">
+        <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
+    </div>
+    <div id="imageModal" class="modal" onclick="closeImage()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+</section>
 
-<div class="form-container" id="logowanie">
+<section id="wyzwania">
+    <h2>Wyzwania</h2>
+    <p>Tutaj znajdziesz nasze grupowe wyzwania.</p>
+</section>
+
+<section id="kalendarz">
+    <h2>Kalendarz wydarzeń</h2>
+    <table border="1" cellspacing="0" cellpadding="10">
+        <tr>
+            <th>Data</th>
+            <th>Wydarzenie</th>
+        </tr>
+        <tr>
+            <td>21.09.2024</td>
+            <td>Ryby</td>
+        </tr>
+    </table>
+</section>
+
+<section id="przepisy">
+    <h2>Nasze przepisy</h2>
+    <ul>
+        <li><strong>Przykład 1:</strong> Pizza: ciasto, sos pomidorowy, ser.</li>
+    </ul>
+</section>
+
+<section id="quizy">
+    <h2>Quizy i gry</h2>
+    <ul>
+        <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
+    </ul>
+</section>
+
+<section id="admin-panel">
+    <h2>Panel administratora</h2>
+    <p>Statystyki użytkowników:</p>
+    <p>Zarejestrowani użytkownicy: <span id="registeredUsers">0</span></p>
+    <p>Aktywni użytkownicy: <span id="activeUsers">0</span></p>
+</section>
+
+<!-- Sekcje logowania i rejestracji -->
+<section id="login-section">
     <h2>Logowanie</h2>
-    <input type="text" id="loginName" placeholder="Imię" required>
-    <input type="password" id="loginPassword" placeholder="Hasło" required>
-    <button onclick="loginUser()">Zaloguj się</button>
-</div>
+    <input type="text" id="loginName" placeholder="Imię">
+    <input type="password" id="loginPassword" placeholder="Hasło">
+    <button onclick="login()">Zaloguj się</button>
+</section>
+
+<section id="register-section">
+    <h2>Rejestracja</h2>
+    <input type="text" id="registerName" placeholder="Imię">
+    <input type="password" id="registerPassword" placeholder="Hasło">
+    <button onclick="register()">Zarejestruj się</button>
+</section>
 
 <footer>
-    <p style="margin: 0; padding: 10px 0;">Strona stworzona dla znajomych - Wszelkie prawa zastrzeżone &copy; 2024</p>
-    <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
+    <p>Strona stworzona dla znajomych &copy; 2024</p>
+    <p style="font-size: 12px; text-align: right;">Autor strony: @dojduss</p>
 </footer>
 
 <script>
     let users = [];
-    let isAdmin = false;
+    let activeUser = null;
 
-    function showSection(sectionId) {
-        const overlay = document.getElementById('overlay');
-        overlay.classList.add('active');
-
-        setTimeout(() => {
-            var sections = document.querySelectorAll('section, .form-container');
-            sections.forEach(function(section) {
-                section.classList.remove('active');
-            });
-
-            var activeSection = document.getElementById(sectionId);
-            if (activeSection) {
-                activeSection.classList.add('active');
-            }
-
-            overlay.classList.remove('active');
-        }, 500);
-    }
-
-    function registerUser() {
-        const name = document.getElementById('registerName').value;
-        const password = document.getElementById('registerPassword').value;
-
+    function register() {
+        const name = document.getElementById("registerName").value;
+        const password = document.getElementById("registerPassword").value;
         if (name && password) {
-            users.push({ name, password });
-            alert('Rejestracja zakończona sukcesem!');
-            document.getElementById('registerName').value = '';
-            document.getElementById('registerPassword').value = '';
-            updateUserCount();
+            users.push({ name, password, isAdmin: false });
+            alert("Rejestracja zakończona sukcesem!");
         } else {
-            alert('Proszę wypełnić wszystkie pola!');
+            alert("Uzupełnij wszystkie pola!");
         }
     }
 
-    function loginUser() {
-        const name = document.getElementById('loginName').value;
-        const password = document.getElementById('loginPassword').value;
+    function login() {
+        const name = document.getElementById("loginName").value;
+        const password = document.getElementById("loginPassword").value;
 
         const user = users.find(u => u.name === name && u.password === password);
         if (user) {
-            alert('Zalogowano pomyślnie!');
-            isAdmin = (name === 'admin' && password === 'adminpass');
-            showAdminSection();
-            document.getElementById('mainContent').style.display = 'block'; // Pokazujemy zawartość
-            document.getElementById('rejestracja').style.display = 'none'; // Ukrywamy formularz rejestracji
-            document.getElementById('logowanie').style.display = 'none'; // Ukrywamy formularz logowania
-            document.getElementById('logoutButton').style.display = 'block'; // Pokazujemy przycisk wylogowania
-            showSection('glowna'); // Przechodzimy do sekcji głównej
-            document.getElementById('loginName').value = '';
-            document.getElementById('loginPassword').value = '';
-        } else {
-            alert('Błędne dane logowania!');
-        }
-    }
+            activeUser = user;
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("register-section").style.display = "none";
+            document.getElementById("logout-btn").style.display = "inline-block";
 
-    function showAdminSection() {
-        if (isAdmin) {
-            document.getElementById('adminSection').style.display = 'block';
-            showSection('adminSection');
+            if (user.isAdmin) {
+                document.getElementById("admin-panel").style.display = "block";
+            }
         } else {
-            alert('Musisz być zalogowany jako administrator!');
+            alert("Niepoprawne dane logowania.");
         }
     }
 
     function logout() {
-        users = [];
-        isAdmin = false;
-        document.getElementById('mainContent').style.display = 'none'; // Ukrywamy zawartość
-        document.getElementById('rejestracja').style.display = 'block'; // Pokazujemy formularz rejestracji
-        document.getElementById('logowanie').style.display = 'block'; // Pokazujemy formularz logowania
-        document.getElementById('logoutButton').style.display = 'none'; // Ukrywamy przycisk wylogowania
-        alert('Wylogowano pomyślnie!');
-        updateUserCount();
+        activeUser = null;
+        document.getElementById("login-section").style.display = "block";
+        document.getElementById("register-section").style.display = "block";
+        document.getElementById("admin-panel").style.display = "none";
+        document.getElementById("logout-btn").style.display = "none";
     }
 
     function playMusic() {
-        document.getElementById('backgroundMusic').play();
+        document.getElementById("backgroundMusic").play();
     }
 
     function stopMusic() {
-        document.getElementById('backgroundMusic').pause();
+        document.getElementById("backgroundMusic").pause();
     }
 
     function openImage(src) {
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("img01");
-        const captionText = document.getElementById("caption");
-        modal.style.display = "block";
-        modalImg.src = src;
-        captionText.innerHTML = "Przyjacielskie wspomnienie";
+        document.getElementById("imageModal").style.display = "block";
+        document.getElementById("img01").src = src;
     }
 
     function closeImage() {
-        const modal = document.getElementById("imageModal");
-        modal.style.display = "none";
+        document.getElementById("imageModal").style.display = "none";
     }
 
-    function updateUserCount() {
-        document.getElementById('userCount').innerText = users.length;
+    function showSection(sectionId) {
+        const sections = document.querySelectorAll("section");
+        sections.forEach(section => section.classList.remove("active"));
+        document.getElementById(sectionId).classList.add("active");
     }
+
 </script>
-
 </body>
 </html>
