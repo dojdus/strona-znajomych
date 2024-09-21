@@ -136,37 +136,24 @@
             cursor: pointer;
         }
         .form-container {
-            display: none;
+            margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
-            margin: 20px;
+            background: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-container.active {
-            display: block;
+            width: 300px;
         }
         .form-container input {
+            display: block;
             margin: 10px 0;
             padding: 10px;
             width: 100%;
-            box-sizing: border-box;
-        }
-        .form-container button {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .form-container button:hover {
-            background-color: #45a049;
         }
         .admin-section {
             display: none;
+            margin: 20px;
             padding: 20px;
             background-color: #fff;
-            margin: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -185,85 +172,84 @@
     <button onclick="showSection('kalendarz')">Kalendarz</button>
     <button onclick="showSection('przepisy')">Przepisy</button>
     <button onclick="showSection('quizy')">Quizy</button>
-    <button onclick="showSection('rejestracja')">Rejestracja</button>
-    <button onclick="showSection('logowanie')">Logowanie</button>
-    <button onclick="showAdminSection()">Admin</button>
 </nav>
 
 <div class="overlay" id="overlay"></div>
 
-<section id="glowna" class="active">
-    <h2>Strona główna</h2>
-    <p>Witamy na naszej wspólnej stronie, gdzie dzielimy się wspomnieniami, wyzwaniami, przepisami i więcej!</p>
-    
-    <div class="music-container">
-        <span>&#127926;</span>
-        <button onclick="playMusic()">Play</button>
-        <button onclick="stopMusic()">Stop</button>
-        <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio>
-    </div>
-</section>
+<div id="mainContent" style="display: none;">
+    <section id="glowna" class="active">
+        <h2>Strona główna</h2>
+        <p>Witamy na naszej wspólnej stronie, gdzie dzielimy się wspomnieniami, wyzwaniami, przepisami i więcej!</p>
+        
+        <div class="music-container">
+            <span>&#127926;</span>
+            <button onclick="playMusic()">Play</button>
+            <button onclick="stopMusic()">Stop</button>
+            <audio id="backgroundMusic" src="https://raw.githubusercontent.com/dojdus/strona-znajomych/main/music/parapetówka.mp3"></audio>
+        </div>
+    </section>
 
-<section id="wspomnienia">
-    <h2>Nasze wspomnienia</h2>
-    <p>Dodaj swoje wspomnienia poniżej:</p>
-    <div class="gallery">
-        <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
-        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
-    </div>
-    <div id="imageModal" class="modal" onclick="closeImage()">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
-    </div>
-</section>
+    <section id="wspomnienia">
+        <h2>Nasze wspomnienia</h2>
+        <p>Dodaj swoje wspomnienia poniżej:</p>
+        <div class="gallery">
+            <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
+            <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
+            <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
+            <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
+        </div>
+        <div id="imageModal" class="modal" onclick="closeImage()">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="img01">
+            <div id="caption"></div>
+        </div>
+    </section>
 
-<section id="wyzwania">
-    <h2>Wyzwania</h2>
-    <p>Tutaj znajdziesz nasze grupowe wyzwania.</p>
-    <ul>
-        <li>Wyzwanie 1: Jeszcze nie wiem co tu będzie</li>
-        <li>Wyzwanie 2: Jeszcze nie wiem co tu będzie</li>
-    </ul>
-</section>
+    <section id="wyzwania">
+        <h2>Wyzwania</h2>
+        <p>Tutaj znajdziesz nasze grupowe wyzwania.</p>
+        <ul>
+            <li>Wyzwanie 1: Jeszcze nie wiem co tu będzie</li>
+            <li>Wyzwanie 2: Jeszcze nie wiem co tu będzie</li>
+        </ul>
+    </section>
 
-<section id="kalendarz">
-    <h2>Kalendarz wydarzeń</h2>
-    <table border="1" cellspacing="0" cellpadding="10">
-        <tr>
-            <th>Data</th>
-            <th>Wydarzenie</th>
-        </tr>
-        <tr>
-            <td>21.09.2024</td>
-            <td>Ryby</td>
-        </tr>
-        <tr>
-            <td>22.09.2024</td>
-            <td>Ryby</td>
-        </tr>
-    </table>
-</section>
+    <section id="kalendarz">
+        <h2>Kalendarz wydarzeń</h2>
+        <table border="1" cellspacing="0" cellpadding="10">
+            <tr>
+                <th>Data</th>
+                <th>Wydarzenie</th>
+            </tr>
+            <tr>
+                <td>21.09.2024</td>
+                <td>Ryby</td>
+            </tr>
+            <tr>
+                <td>22.09.2024</td>
+                <td>Ryby</td>
+            </tr>
+        </table>
+    </section>
 
-<section id="przepisy">
-    <h2>Nasze przepisy</h2>
-    <p>Dodaj swoje ulubione przepisy tutaj.</p>
-    <ul>
-        <li><strong>Nie wiem:</strong> Nie wiem co tu będzie.</li>
-        <li><strong>Ale przykład od Wojtusia: Pizza:</strong> Ciasto, sos pomidorowy, ser, dodatki.</li>
-    </ul>
-</section>
+    <section id="przepisy">
+        <h2>Nasze przepisy</h2>
+        <p>Dodaj swoje ulubione przepisy tutaj.</p>
+        <ul>
+            <li><strong>Nie wiem:</strong> Nie wiem co tu będzie.</li>
+            <li><strong>Ale przykład od Wojtusia: Pizza:</strong> Ciasto, sos pomidorowy, ser, dodatki.</li>
+        </ul>
+    </section>
 
-<section id="quizy">
-    <h2>Quizy i gry</h2>
-    <p>Sprawdź swoją wiedzę w quizach!</p>
-    <ul>
-        <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
-        <li>Quiz 2: Sprawdź swoją wiedzę o filmach.</li>
-    </ul>
-</section>
+    <section id="quizy">
+        <h2>Quizy i gry</h2>
+        <p>Sprawdź swoją wiedzę w quizach!</p>
+        <ul>
+            <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
+            <li>Quiz 2: Jak dobrze znasz jedzenie?</li>
+        </ul>
+    </section>
+</div>
 
 <div class="form-container" id="rejestracja">
     <h2>Rejestracja</h2>
@@ -312,15 +298,6 @@
         }, 500);
     }
 
-    function showAdminSection() {
-        if (isAdmin) {
-            document.getElementById('adminSection').style.display = 'block';
-            showSection('adminSection');
-        } else {
-            alert('Musisz być zalogowany jako administrator!');
-        }
-    }
-
     function registerUser() {
         const name = document.getElementById('registerName').value;
         const password = document.getElementById('registerPassword').value;
@@ -343,8 +320,10 @@
         const user = users.find(u => u.name === name && u.password === password);
         if (user) {
             alert('Zalogowano pomyślnie!');
-            isAdmin = (name === 'admin' && password === 'adminpass'); // Prosta logika admina
+            isAdmin = (name === 'admin' && password === 'adminpass');
             showAdminSection();
+            document.getElementById('mainContent').style.display = 'block'; // Pokazujemy zawartość
+            showSection('glowna'); // Przechodzimy do sekcji głównej
             document.getElementById('loginName').value = '';
             document.getElementById('loginPassword').value = '';
         } else {
@@ -352,25 +331,30 @@
         }
     }
 
+    function showAdminSection() {
+        if (isAdmin) {
+            document.getElementById('adminSection').style.display = 'block';
+            showSection('adminSection');
+        } else {
+            alert('Musisz być zalogowany jako administrator!');
+        }
+    }
+
     function playMusic() {
-        const audio = document.getElementById('backgroundMusic');
-        audio.play();
+        document.getElementById('backgroundMusic').play();
     }
 
     function stopMusic() {
-        const audio = document.getElementById('backgroundMusic');
-        audio.pause();
-        audio.currentTime = 0; // Resetowanie do początku
+        document.getElementById('backgroundMusic').pause();
     }
 
     function openImage(src) {
         const modal = document.getElementById("imageModal");
-        const img = document.getElementById("img01");
-        const caption = document.getElementById("caption");
-
-        img.src = src;
-        caption.innerHTML = src; // Opcjonalnie zmień, aby dodać podpis
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
         modal.style.display = "block";
+        modalImg.src = src;
+        captionText.innerHTML = "Przyjacielskie wspomnienie";
     }
 
     function closeImage() {
