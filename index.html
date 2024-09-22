@@ -61,6 +61,22 @@
             width: 100%;
             opacity: 0.9;
         }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 10;
+        }
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         .music-container {
             text-align: center;
             margin: 20px 0;
@@ -119,30 +135,6 @@
             font-weight: bold;
             cursor: pointer;
         }
-        #login-section, #register-section {
-            padding: 20px;
-            background-color: #fff;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #admin-panel {
-            display: none;
-            padding: 20px;
-            background-color: #eee;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        #logout-btn {
-            display: none;
-            padding: 10px 20px;
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -151,7 +143,6 @@
     <h1>Witamy na stronie znajomych!</h1>
 </header>
 
-<!-- Sekcja nawigacji -->
 <nav>
     <button onclick="showSection('glowna')">Strona główna</button>
     <button onclick="showSection('wspomnienia')">Wspomnienia</button>
@@ -159,8 +150,9 @@
     <button onclick="showSection('kalendarz')">Kalendarz</button>
     <button onclick="showSection('przepisy')">Przepisy</button>
     <button onclick="showSection('quizy')">Quizy</button>
-    <button id="logout-btn" onclick="logout()">Wyloguj</button>
 </nav>
+
+<div class="overlay" id="overlay"></div>
 
 <section id="glowna" class="active">
     <h2>Strona główna</h2>
@@ -176,9 +168,12 @@
 
 <section id="wspomnienia">
     <h2>Nasze wspomnienia</h2>
+    <p>Dodaj swoje wspomnienia poniżej:</p>
     <div class="gallery">
         <img src="images/zdjecie1.png" alt="Zdjęcie 1" class="thumbnail" onclick="openImage(this.src)">
         <img src="images/zdjecie2.png" alt="Zdjęcie 2" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie6.webp" alt="Zdjęcie 6" class="thumbnail" onclick="openImage(this.src)">
+        <img src="images/zdjecie7.webp" alt="Zdjęcie 7" class="thumbnail" onclick="openImage(this.src)">
     </div>
     <div id="imageModal" class="modal" onclick="closeImage()">
         <span class="close">&times;</span>
@@ -190,6 +185,10 @@
 <section id="wyzwania">
     <h2>Wyzwania</h2>
     <p>Tutaj znajdziesz nasze grupowe wyzwania.</p>
+    <ul>
+        <li>Wyzwanie 1: Jeszcze nie wiem co tu będzie</li>
+        <li>Wyzwanie 2: Jeszcze nie wiem co tu będzie</li>
+    </ul>
 </section>
 
 <section id="kalendarz">
@@ -203,115 +202,80 @@
             <td>21.09.2024</td>
             <td>Ryby</td>
         </tr>
+        <tr>
+            <td>22.09.2024</td>
+            <td>Ryby</td>
+        </tr>
     </table>
 </section>
 
 <section id="przepisy">
     <h2>Nasze przepisy</h2>
+    <p>Dodaj swoje ulubione przepisy tutaj.</p>
     <ul>
-        <li><strong>Przykład 1:</strong> Pizza: ciasto, sos pomidorowy, ser.</li>
+        <li><strong>Nie wiem:</strong> Nie wiem co tu będzie.</li>
+        <li><strong>Ale przykład od Wojtusia: Pizza:</strong> Ciasto, sos pomidorowy, ser, dodatki.</li>
     </ul>
 </section>
 
 <section id="quizy">
     <h2>Quizy i gry</h2>
+    <p>Sprawdź swoją wiedzę w quizach!</p>
     <ul>
         <li>Quiz 1: Jak dobrze znasz przyjaciół?</li>
+        <li>Quiz 2: Sprawdź swoją wiedzę o filmach.</li>
     </ul>
 </section>
 
-<section id="admin-panel">
-    <h2>Panel administratora</h2>
-    <p>Statystyki użytkowników:</p>
-    <p>Zarejestrowani użytkownicy: <span id="registeredUsers">0</span></p>
-    <p>Aktywni użytkownicy: <span id="activeUsers">0</span></p>
-</section>
-
-<!-- Sekcje logowania i rejestracji -->
-<section id="login-section">
-    <h2>Logowanie</h2>
-    <input type="text" id="loginName" placeholder="Imię">
-    <input type="password" id="loginPassword" placeholder="Hasło">
-    <button onclick="login()">Zaloguj się</button>
-</section>
-
-<section id="register-section">
-    <h2>Rejestracja</h2>
-    <input type="text" id="registerName" placeholder="Imię">
-    <input type="password" id="registerPassword" placeholder="Hasło">
-    <button onclick="register()">Zarejestruj się</button>
-</section>
-
 <footer>
-    <p>Strona stworzona dla znajomych &copy; 2024</p>
-    <p style="font-size: 12px; text-align: right;">Autor strony: @dojduss</p>
+    <p style="margin: 0; padding: 10px 0;">Strona stworzona dla znajomych - Wszelkie prawa zastrzeżone &copy; 2024</p>
+    <p style="font-size: 12px; margin: 0; text-align: right;">Autor strony: @dojduss</p>
 </footer>
 
 <script>
-    let users = [];
-    let activeUser = null;
+    function showSection(sectionId) {
+        const overlay = document.getElementById('overlay');
+        overlay.classList.add('active');
 
-    function register() {
-        const name = document.getElementById("registerName").value;
-        const password = document.getElementById("registerPassword").value;
-        if (name && password) {
-            users.push({ name, password, isAdmin: false });
-            alert("Rejestracja zakończona sukcesem!");
-        } else {
-            alert("Uzupełnij wszystkie pola!");
-        }
-    }
+        setTimeout(() => {
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function(section) {
+                section.classList.remove('active');
+            });
 
-    function login() {
-        const name = document.getElementById("loginName").value;
-        const password = document.getElementById("loginPassword").value;
+            var activeSection = document.getElementById(sectionId);
+            activeSection.classList.add('active');
 
-        const user = users.find(u => u.name === name && u.password === password);
-        if (user) {
-            activeUser = user;
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("register-section").style.display = "none";
-            document.getElementById("logout-btn").style.display = "inline-block";
-
-            if (user.isAdmin) {
-                document.getElementById("admin-panel").style.display = "block";
-            }
-        } else {
-            alert("Niepoprawne dane logowania.");
-        }
-    }
-
-    function logout() {
-        activeUser = null;
-        document.getElementById("login-section").style.display = "block";
-        document.getElementById("register-section").style.display = "block";
-        document.getElementById("admin-panel").style.display = "none";
-        document.getElementById("logout-btn").style.display = "none";
+            overlay.classList.remove('active');
+        }, 500);
     }
 
     function playMusic() {
-        document.getElementById("backgroundMusic").play();
+        const audio = document.getElementById('backgroundMusic');
+        audio.play();
     }
 
     function stopMusic() {
-        document.getElementById("backgroundMusic").pause();
+        const audio = document.getElementById('backgroundMusic');
+        audio.pause();
+        audio.currentTime = 0; // Resetowanie do początku
     }
 
     function openImage(src) {
-        document.getElementById("imageModal").style.display = "block";
-        document.getElementById("img01").src = src;
+        const modal = document.getElementById("imageModal");
+        const img = document.getElementById("img01");
+        const caption = document.getElementById("caption");
+
+        img.src = src;
+        caption.innerHTML = src; // Opcjonalnie zmień, aby dodać podpis
+        modal.style.display = "block";
     }
 
     function closeImage() {
-        document.getElementById("imageModal").style.display = "none";
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none";
     }
-
-    function showSection(sectionId) {
-        const sections = document.querySelectorAll("section");
-        sections.forEach(section => section.classList.remove("active"));
-        document.getElementById(sectionId).classList.add("active");
-    }
-
 </script>
+
 </body>
 </html>
